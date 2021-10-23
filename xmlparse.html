@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <p id="demo"></p>
+
+    <script>
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                myFunction(this);
+            }
+        };
+        xhttp.open("GET", "https://www.cnnindonesia.com/nasional/rss", true);
+        xhttp.send();
+
+        function myFunction(xml) {
+            var x, i, xmlDoc, txt;
+            xmlDoc = xml.responseXML;
+            txt = "";
+            contoh = [];
+            var himpunan = [];
+            x = xmlDoc.getElementsByTagName('item');
+            var z = 1;
+            for (i = 0; i < x.length; i++) {
+                for (var a = 1; a < x[i].children.length; a++) {
+                    if (a == 1) {
+                        himpunan[a] = x[i].children[a].innerHTML;
+                    }
+
+                    else if (a == 2) {
+                        himpunan[a] = x[i].children[a].childNodes[0].data;
+                    }
+
+                    else if (a == 3)
+                        continue;
+
+                    else if (a == 4) {
+                        himpunan[a] = x[i].children[a].getAttribute("url");
+                    }
+
+                    else if (a == 5) {
+                        himpunan[a] = x[i].children[a].childNodes[0].data;
+                    }
+
+                    else if (a == 6) {
+                        himpunan[a] = x[i].children[a].innerHTML;
+                    }
+
+                    txt += himpunan[a] + "<br>";
+
+                }
+                txt += "<br>";
+                contoh[i] = {
+                    tanggal: himpunan[1],
+                    judul: himpunan[2],
+                    link_gambar: himpunan[4],
+                    deskripsi: himpunan[5],
+                    link_berita: himpunan[6]
+                }
+            }
+
+
+            document.getElementById("demo").innerHTML = txt;
+            var toJSON = [];
+            for (var i = 0; i < 100; i++) {
+                toJSON[i] = JSON.stringify(contoh[i]);
+                // console.log(toJSON[i]);
+            }
+
+            document.getElementById("demo").innerHTML = txt;
+            var myObj = JSON.parse(toJSON[0]);
+            // document.getElementById('demo').innerHTML = myObj.judul;
+
+        }
+    </script>
+
+</body>
+
+</html>
